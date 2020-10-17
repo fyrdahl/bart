@@ -61,7 +61,11 @@ def bart(nargout, cmd, *args):
             ERR = os.system('bash.exe --login -c ' + bart_path + '"/bart ' + cmd.replace(os.path.sep, '/') + ' ' + in_str.replace(os.path.sep, '/') + ' ' + out_str.replace(os.path.sep, '/') + '"')
             #TODO: Test with cygwin, this is just translation from matlab code
     else:
-        ERR = os.system(bart_path + '/bart ' + cmd + ' ' + in_str + ' ' + out_str)
+        if nargout == 0:
+            OUT = os.popen(bart_path + '/bart ' + cmd + ' ' + in_str + ' ' + out_str).read()
+            return OUT.replace("\n", "")
+        else:
+            ERR = os.system(bart_path + '/bart ' + cmd + ' ' + in_str + ' ' + out_str)
 
     for elm in infiles:
         if os.path.isfile(elm + '.cfl'):
